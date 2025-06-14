@@ -1,0 +1,191 @@
+<script>
+  function toggleCheckboxes(checkBox) {
+    if (checkBox.name === "winePreference"){
+      var selector = "input[name='winePreference']:not(#no-wine)";
+      var noneSelector = 'no-wine';
+    }else if ( checkBox.name === "liquorPreference"){
+      var selector = "input[name='liquorPreference']:not(#no-liquor)";
+      var noneSelector = 'no-liquor';
+    }
+    if (checkBox.value === '' && checkBox.checked){
+      const drinkCheckboxes = document.querySelectorAll(selector);
+      drinkCheckboxes.forEach(cBox => cBox.checked = false);
+    }else {
+      const noDrinkCheckbox = document.getElementById(noneSelector);
+      if (noDrinkCheckbox.checked && checkBox.checked){
+          noDrinkCheckbox.checked = false;
+      }
+    }
+  };
+  function toggleSelectRequired(sectionID) {
+    // Update next section required fields
+    let section = document.getElementById(sectionID);
+    let select = section.getElementsByClassName("required");
+    if (section.classList.contains("hidden")){
+      for (let s of select) {
+          s.removeAttribute("required");
+      }
+    }else{
+      for (let s of select) {
+          s.setAttribute("required","required");
+      }
+    }
+  };
+  function toggleVisibility(sectionID) {
+    let section = document.getElementById(sectionID);
+    var errormsg = section.getElementsByClassName("error-text")[0]
+    if (errormsg){
+      errormsg.style.display = "none";
+    }  
+    if (section.classList.contains("hidden")){
+      section.classList.remove("hidden");
+    }else {
+      section.classList.add("hidden");
+    }
+    toggleSelectRequired(sectionID);
+  };
+  function checkNumber(input) {
+    input.value = input.value.replace(/[^0-9.]/g, '');
+    let value = input.value;
+    if (value === ""){
+      return;
+    } else {
+      value = parseInt(input.value);
+      if (value < parseInt(input.min)){
+        input.value = input.min;
+        return;
+      } else if (value > parseInt(input.max)) {
+        input.value = input.max;
+        return;
+      }
+      input.value = value;
+    }
+    return;
+  };
+  function checkRequired(section) {
+    var required = section.getElementsByClassName("required");
+    let checkboxGroups = {};
+    for (let r of required) {
+      if (r.type === "text" || r.type === "email" ) {
+        if (r.value.trim() === "") {
+          return false;
+        }
+      }else if (r.type === 'tel'){
+        if (r.value.length < r.minLength || r.value.length > r.maxLength){
+          return false
+        }
+      }else if (r.type === "number") {
+        if (r.value === "" || isNaN(r.value)) {
+          return false;
+        }
+      } else if (r.tagName.toLowerCase() === "select") {
+        // Ensure the selected value is not empty (i.e., the default "Select an option")
+        if (r.value === "") {
+          return false;
+        }
+      } else if (r.type === "radio") {
+        var radioGroup = section.querySelectorAll(`input[name='${r.name}']`);
+        var radioSelected = false;
+        for (let radio of radioGroup) {
+          if (radio.checked) {
+            radioSelected = true;
+            break;
+          }
+        }
+        if (!radioSelected) {
+          return false;
+        }
+      } else if (r.type === "checkbox") {
+        // Group checkboxes by name (e.g., "winePreference", "liquorPreference")
+        if (!checkboxGroups[r.name]) {
+          checkboxGroups[r.name] = section.querySelectorAll(`input[name='${r.name}']`);
+        }
+      }
+    }
+    for (let groupName in checkboxGroups) {
+      let group = checkboxGroups[groupName];
+      let isChecked = Array.from(group).some(cb => cb.checked);
+      if (!isChecked) {
+        return false;
+      }
+    }
+    return true;
+  };
+  function nextSection(current) {
+    event.preventDefault();
+    let sectionID = "section"+current;
+    let section = document.getElementById(sectionID);
+    var dropdownSections = [1,2,4,6];
+    if (!checkRequired(section)) {
+      let error = section.getElementsByClassName("error-text")[0].style.display = "block";
+      return;
+    };
+    if (dropdownSections.includes(current)){
+      var dropdownSelection = section.getElementsByClassName("dropdown")[0];
+      var selectedOption = dropdownSelection.options[dropdownSelection.selectedIndex];
+      var nextSection = "section"+selectedOption.dataset.next;
+    } else {
+      var nextSection = "section"+parseInt(current+1);
+    }
+    toggleVisibility(sectionID);
+    toggleVisibility(nextSection);
+    var nextSectionBack = document.getElementById(nextSection+"-back");
+    nextSectionBack.dataset.last = sectionID;
+    return;
+  };
+  function prevSection(button, current) {
+    event.preventDefault();
+    var sectionID = "section"+current;
+    var lastSectionID = button.dataset.last;
+    toggleVisibility(sectionID);
+    toggleVisibility(lastSectionID);
+    button.dataset.last = "";
+    return;
+  };
+  function redirectPage(newURL) {
+    console.log(newURL);
+    function updateUrlParams(url) {
+      let urlObj = new URL(url);
+      let params = Object.fromEntries(urlObj.searchParams.entries());
+      google.script.history.replace({}, params, "");
+    }
+    var button = document.getElementById('finish')
+    button.href = newURL;
+    button.classList.remove("hidden")
+    if (newURL != "https://www.byankaandrobertovasquez.com/rsvp-thank-you"){
+      button.innerHTML = "<button>Next</button>"
+    }
+    hideLoading();
+  };
+  function showLoading() {
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  };
+  function hideLoading() {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  };
+  function submitForm() {
+    event.preventDefault();
+    showLoading();
+    document.getElementById("submit-form").style.display = "none";
+    google.script.url.getLocation(function (location) {
+      var phoneNumber = location.parameters.phoneNumber[0];
+      var guestID = location.parameters.guestID[0];
+      let hiddenInput = document.createElement("input");
+      let guestIDInput = document.createElement("input");
+      guestIDInput.type = "hidden";
+      guestIDInput.name = "guestID";
+      guestIDInput.value = guestID;
+      hiddenInput.type = "hidden";
+      hiddenInput.name = "phoneNumber";
+      hiddenInput.value = phoneNumber;
+      let form = document.getElementById("form-entry");
+      form.appendChild(hiddenInput);
+      form.appendChild(guestIDInput);
+      // Send data
+      google.script.run.withSuccessHandler(redirectPage).withFailureHandler(() => {
+      }).acceptData(form);
+    });
+  };
+</script>

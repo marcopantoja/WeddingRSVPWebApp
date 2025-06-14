@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Phone Number Entry</title>
+  <base target="_blank" rel="noopener noreferrer">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Ponomar&family=Scope+One&display=swap" rel="stylesheet">
+  <?!= include('Stylesheet'); ?>
+</head>
+<body style="padding-bottom: 20%; margin-bottom: 30px;">
+  <div style="padding-top: 5%;"></div>
+  <div class="form-heading-container">
+    <?!= include('HeaderImage'); ?>
+    <h1 class="form-title">Byanka & Roberto Vasquez Wedding</h1>
+  </div>
+  <form id="form-entry">
+    <div class="form-entry-container">
+      <h2 class="question-title">Phone Number</h2>
+      <p class="question-description">Please enter your 10-digit phone number with numbers only and no spaces</p>
+      <input type="tel" name="primaryPhone" placeholder="0000000000" minlength="10" id="short-number-entry" pattern="[0-9]{10}" maxlength="10" required><p></p>
+      <p id="error-text" style="display: none; color: red;">Please enter a valid phone number. Contact Byanka or Roberto if you believe there is an error!</p>
+    </div>
+    <button type="submit" id="submit-button">Submit</button>
+  </form>
+  <div id="success-message" class="hidden">
+    <div class="form-entry-container">
+      <p>Phone number was validated! Please click below to continue.</p>
+    </div>
+    <a id="next-page-button" href="#">
+      <button onclick="loadFrame()">Continue</button>
+    </a>
+  </div>
+  <div class="form-entry-container">
+    <h2>Event Addresses</h2>
+    <h3>Mass Ceremony</h3>
+    <a href="https://www.ststephenvc.com/">St. Stephen Catholic Church</a><p></p>
+    <a href="https://maps.app.goo.gl/YFgiuFBXt98L4j47A">31020 Cole Grade Road, Valley Center CA, 92082</a>
+    <h3>Reception</h3>
+    <a href="https://www.ranchoguejitovineyard.com/">Rancho Guejito Vineyard</a><p></p>
+    <a href="https://maps.app.goo.gl/LwrX6x4ZUU7BPqQG8">17224 San Pasqual Valley Rd, Escondido CA 92027</a>
+    <h3>Contact Us:</h3>
+    <p>Byanka Pantoja</p>
+    <a href="tel:+PH_NUM" style="margin-right: 10px;">Call</a>
+    <a href="sms:+PH_NUM" style="margin-right: 10px;">Text</a>
+    <a href="mailto:EMAIL@gmail.com">E-mail</a>
+    <p>Roberto Vasquez</p>
+    <a href="tel:+PH_NUM" style="margin-right: 10px;">Call</a>
+    <a href="sms:+PH_NUM" style="margin-right: 10px;">Text</a>
+    <a href="mailto:EMAIL@gmail.com">E-mail</a>
+  </div>
+  <div style="padding-bottom: 5%;"><p>Thank you for visiting!</p></div>
+  <div id="overlay"></div>
+  <div class="loader" id="loader"></div>
+  <?!= include('Javascript'); ?>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<script>
+  document.getElementById("short-number-entry").addEventListener("input", function () {
+      this.value = this.value.replace(/\D/g, "").slice(0, 10); // Remove non-digits, limit to 10
+  });
+  function showLoading() {
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  };
+  function hideLoading() {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  };
+  function loadFrame () {
+    document.getElementById('dynamicFormFrame').src = document.getElementById('next-page-button').href;
+  };
+  document.getElementById("form-entry").addEventListener("submit", function(event) {
+    showLoading();
+    event.preventDefault(); // Prevent default form submission
+    // Send data
+    function updateURL(response) {
+      let form = document.getElementById("form-entry")
+      form.reset();
+      if (response == 'NA') {
+        document.getElementById("error-text").style.display = "block";
+      }else {
+        form.style.display = "none";
+        document.getElementById("next-page-button").href = response;
+        let successMsg = document.getElementById("success-message");
+        successMsg.classList.remove("hidden");
+        successMsg.style.marginBottom = "40px";
+      }
+      hideLoading();
+    }
+    google.script.run.withSuccessHandler(updateURL).withFailureHandler(() => {
+    }).acceptData(this);
+  });
+</script>

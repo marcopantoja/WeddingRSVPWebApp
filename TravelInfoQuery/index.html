@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Group Hotel and Air Travel Preferences</title>
+    <base target="_top" rel="noopener noreferrer">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Ponomar&family=Scope+One&display=swap" rel="stylesheet">
+  </head>
+  <?!= include('Stylesheet'); ?>
+  <body>
+    <div style="padding-top: 5%;"></div>
+    <div class="form-heading-container">
+      <?!= include('HeaderImage'); ?>
+      <h1 class="form-title">Byanka and Roberto Vasquez Wedding</h1>
+      <h3 class="question-title">Please complete group hotel and air travel preferences for your party. This is to inform us about everyone's hotel and flight preferences. We will handle the logistics after and select hotels that fit everyone's needs. We will also do the group air booking for everyone if we have a minimum of 10 people interested.</h3>
+    </div>
+  <form id="form-entry">
+    <!-- Section 1 Group Hotel Inquiry -->
+    <div id="section1" class="form-section">
+      <div class="form-entry-container">
+        <h3 class="question-title">Would you be interested in group hotel accommodations, or will you be booking separately?</h3>
+        <p id="error1" class="error-text">Please make a selection before continuing!</p>
+        <label class="option">
+          <input class="required" type="radio" name="groupHotelInquire" data-next="2" value="yes">
+          Yes, I am interested!
+        </label>
+        <label class="option">
+          <input class="required" type="radio" name="groupHotelInquire" data-next="4" value="no">
+          No, I will be booking my own accommodations.
+        </label>
+      </div>
+      <button onclick="nextSection(1)">Next</button>
+    </div>
+    <!-- Section 2 Group Hotel -->
+    <div id="section2" class="form-section hidden">
+      <div class="form-entry-container">
+        <h3 class="question-title">Group Hotel Preferences</h3>
+        <p>To assist us in making the most relevant hotel suggestions, please answer all of the following questions to continue.</p>
+        <p id="error2" class="error-text">Please complete this section before continuing!</p>
+      </div>
+      <div class="form-entry-container">
+        <h3 class="question-title">What is your maximum budget?</h3>
+        <p> Per room in dollars, or enter 0 if you have no maximum preference</p>
+        <input class="required" type="number" name="maxBudget" id="max-budget-input" max="500" min="0" inputmode="numeric" placeholder="0 - 500" onblur="checkNumber(this)">
+      </div>
+      <div class="form-entry-container">
+        <h3 class="question-title">What is your minimum budget?</h3>
+        <p>Per room in dollars, or enter 0 if you have no minimum preference</p>
+        <input class="required" type="number" name="minBudget" id="min-budget-input" max="100" min="0" inputmode="numeric" placeholder="0 - 100" onblur="checkNumber(this)">
+      </div>
+      <div class="form-entry-container">
+        <h3 class="question-title">How many 1-bed rooms would you be interested in booking for your party?</h3>
+        <p>This may be either 1 king bed or 1 queen bed. Enter 0 if you are only booking 2-bed rooms.</p>
+        <select class="dropdown required" name="1BedRoomCount" id="1BedCount">
+          <option value="" selected disabled>Select an option</option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+      <div class="form-entry-container">
+        <h3 class="question-title">How many 2-bed rooms would you be interested in booking for your party?</h3>
+        <p>Select the number of dual queen bed rooms you'd need or 0 if none</p>
+        <select class="dropdown required" name="2BedRoomCount" id="2BedCount">
+          <option value="" selected disabled>Select an option</option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+      <button id="section2-back" data-last="" onclick="prevSection(this, 2)">Back</button>
+      <button onclick="nextSection(2)">Next</button>
+    </div>
+    <!-- Section 3 Commute Preference -->
+    <div id="section3" class="form-section hidden">
+      <div class="form-entry-container">
+        <h3 class="question-title">The venue is about an hour commute from the airport and downtown area, please keep this in mind when giving your preferences.
+        </h3>
+        <p><a href="https://maps.app.goo.gl/r52WVhQBKdBVujoz6" target="_blank">Google Maps</a></p>
+        <?!= include('CommuteImage'); ?>
+      </div>
+      <div class="form-entry-container">
+        <h3 class="question-title">Please tell us how long you would be willing to commute to the venue from your hotel.</h3>
+        <p>Total driving time in minutes each way. Enter 0 if you have no preference.</p>
+        <p id="error3" class="error-text">Please complete this section before continuing!</p>
+        <input class="required" type="number" name="maxCommute" id="max-commute-time" max="120" min="0" placeholder="0-120" inputmode="numeric" onblur="checkNumber(this)">
+      </div>
+      <button id="section3-back" data-last="" onclick="prevSection(this, 3)">Back</button>
+      <button onclick="nextSection(3)">Next</button>
+      <div style="padding-bottom: 20%;"></div>
+    </div>
+    <!-- Section 4 Group Air Inquiry -->
+    <div id="section4" class="form-section hidden">
+      <div class="form-entry-container">
+        <h3 class="question-title">Group Air Travel</h3>
+        <p>It may be cheaper overall to book airfare as a group if we have a minimum of 10 people interested. Please complete the following section, and we may reach out to you later with booking details.</p>
+        <p id="error4" class="error-text">Please complete this section before continuing!</p>
+      </div>
+      <div class="form-entry-container">
+        <h3 class="question-title">Are you interested in a group air travel booking to San Diego?</h3>
+        <p>American Airlines group bookings are the most flexible. You would not all have to take the same plane or depart from the same airports, but all departures (CHI->SAN) need to be within the same 2 days and returns (SAN->CHI) within the same 6 days.</p>
+        <p class="error-text">Please make a selection to continue!</p>
+        <select class="dropdown required" name="groupAirInquiry" id="group-air-inquiry">
+          <option value="" selected disabled>Please make a selection</option>
+          <option value="yes" data-next="5">Yes, I am interested.</option>
+          <option value="no" data-next="6">No, I will be booking separately.</option>
+        </select>
+      </div>
+      <button id="section4-back" data-last="" onclick="prevSection(this, 4)">Back</button>
+      <button onclick="nextSection(4)">Next</button>
+    </div>
+    <!-- Section 5 Group Air Interested -->
+    <div id="section5" class="form-section hidden">
+      <div class="form-entry-container">
+        <h3 class="question-title">How many seats would you like to reserve for your entire party?</h3>
+        <p>Please indicate all seats, even if you and others in your party plan on taking different flights or departing from different cities.</p>
+        <p id="error5" class="error-text">Please complete this section before continuing!</p>
+        <select class="dropdown required" name="groupAirSeats" id="group-air-seat-count">
+          <option value="" selected disabled>Please make a selection</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="6+">6+</option>
+        </select>
+      </div>
+      <button id="section5-back" data-last="" onclick="prevSection(this, 5)">Back</button>
+      <button onclick="nextSection(5)">Next</button>
+    </div>
+    </form>
+    <!-- Submit Page -->
+    <div id="section6" class="form-section hidden">
+      <div class="form-entry-container">
+        <h3 class="question-title">Thank you for completing this part!</h3>
+      </div>
+      <button id="section6-back" data-last="" onclick="prevSection(this, 6)">Back</button>
+      <button id="submit-form" onclick="submitForm()">Submit</button>
+      <a id="finish" class="hidden" href="#"><button>Finish</button></a>
+    </div>
+    <div style="padding-bottom: 20%;"></div>
+    <div id="overlay"></div>
+    <div class="loader" id="loader"></div>
+  <?!= include('Javascript'); ?>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RSVP Guest Details</title>
+    <base target="_top" rel="noopener noreferrer">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Ponomar&family=Scope+One&display=swap" rel="stylesheet">
+  </head>
+  <?!= include('Stylesheet'); ?>
+  <body>
+    <div style="padding-top: 5%;"></div>
+    <div class="form-heading-container">
+      <?!= include('HeaderImage'); ?>
+      <h1 class="form-title">Byanka and Roberto Vasquez Wedding</h1>
+      <h3 class="question-title">Please RSVP for <?= guestName ?></h3>
+    </div>
+    <form id="form-entry">
+      <!-- Section 1 isAttending? -->
+      <div id="section1" class="form-section">
+        <div class="form-entry-container">
+          <h3 class="question-title">Will <?= guestName ?> be accompanying us?</h3>
+          <p class="error-text">Please complete the section before continuing!</p>
+          <select class="dropdown required" name="isAttending" id="is-attending">
+            <option value="" selected disabled>Please make a selection</option>
+            <option value="yes" data-next="2">Yes</option>
+            <option value="no" data-next="8">No, respectfully decline</option>
+          </select>
+        </div>
+        <button onclick="nextSection(1)">Next</button>
+      </div>
+      <!-- Section 2 phoneContact? -->
+      <div id="section2" class="form-section hidden">
+        <div class="form-entry-container">
+          <h3 class="question-title">Phone updates contact info</h3>
+          <p>If we have any future updates regarding hotel booking or group air travel, you may want to provide a phone number for <?= guestName ?> to receive any updates.</p>
+          <p class="error-text">Please complete the section before continuing!</p>
+        </div>
+        <div class="form-entry-container">
+          <h3 class="question-title"><?= guestName ?>'s Verified Name</h3>
+          <p>Please confirm the spelling below. We apologize for any errors. The spelling you provide here will be used in future communications and on your table setting placecards.</p>
+          <input class="required" type="text" name="verifiedName" id="verified-name" value="<?= guestName ?>" inputmode="latin-name">
+        </div>
+        <div class="form-entry-container">
+          <h3 class="question-title">Would <?= guestName ?> like to receive text message updates?</h3>
+          <select class="dropdown required" name="textUpdates" id="text-updates">
+            <option value="" selected disabled>Please make a selection</option>
+            <option value="yes" data-next="3">Yes</option>
+            <option value="no" data-next="4">No</option>
+          </select>
+        </div>
+        <button id="section2-back" data-last="" onclick="prevSection(this, 2)">Back</button>
+        <button onclick="nextSection(2)">Next</button>
+      </div>
+      <!-- Section 3 phoneNumber -->
+      <div id="section3" class="form-section hidden">
+        <div class="form-entry-container">
+          <h3 class="question-title">Please verify the number where <?= guestName ?> would like to receive future updates.</h3>
+          <p>Enter a 10 digit number with no spaces or additional characters</p>
+          <p class="error-text">Please complete the section before continuing!</p>
+          <input class="required" type="tel" name="phoneNumber" placeholder="0000000000" minlength="10" id="phone-number" pattern="[0-9]{10}" maxlength="10" min="0" max="9999999999" inputmode="tel" onblur="checkNumber(this)">
+        </div>
+        <button id="section3-back" data-last="" onclick="prevSection(this, 3)">Back</button>
+        <button onclick="nextSection(3)">Next</button>
+      </div>
+      <!-- Section 4 emailContact? -->
+      <div id="section4" class="form-section hidden">
+        <div class="form-entry-container">
+          <h3 class="question-title">Email Updates Contact Info</h3>
+          <p>If we have any future updates regarding hotel booking, or any changes, etc. we can notify you by email. Would <?= guestName ?> like to receive email updates?</p>
+          <p class="error-text">Please complete the section before continuing!</p>
+          <select class="dropdown required" name="emailUpdates" id="email-updates">
+            <option value="" selected disabled>Please make a selection</option>
+            <option value="yes" data-next="5">Yes</option>
+            <option value="no" data-next="6">No</option>
+          </select>
+        </div>
+        <button id="section4-back" data-last="" onclick="prevSection(this, 4)">Back</button>
+        <button onclick="nextSection(4)">Next</button>
+      </div>
+      <!-- Section 5 emailAddress -->
+      <div id="section5" class="form-section hidden">
+        <div class="form-entry-container">
+          <h3 class="question-title">Please enter an email address for <?= guestName ?> to receive future updates.</h3>
+          <p class="error-text">Please complete the section before continuing!</p>
+          <input class="required" type="email" name="email" id="email-address" placeholder="name@example.com" inputmode="email">
+        </div>
+        <button id="section5-back" data-last="" onclick="prevSection(this, 5)">Back</button>
+        <button onclick="nextSection(5)">Next</button>
+      </div>
+      <!-- Section 6 foodPref / over21? -->
+      <div id="section6" class="form-section hidden">
+        <div class="form-entry-container">
+          <h3 class="question-title">Please answer the following to help us offer the best selection of food and drinks.</h3>
+          <p class="error-text">Please complete the section before continuing!</p>
+        </div>
+        <div class="form-entry-container">
+          <h3 class="question-title">Does <?= guestName ?> have any allergies? </h3>
+          <p>If so, please list them below, or enter "none" if not.</p>
+          <input class="required" type="text" name="allergies" id="allergies" placeholder="Do not leave blank" inputmode="latin">
+        </div>
+        <div class="form-entry-container">
+          <h3 class="question-title">Please tell us <?= guestName ?>'s preferred soft drink.</h3>
+          <p>E.g. Sprite, Coke, Dr. Pepper, Ginger Ale, etc.</p>
+          <input class="required" type="text" name="softDrink" inputmode="latin" id="soft-drink" placeholder="non-alcoholic drink preference">
+        </div>
+        <div class="form-entry-container">
+          <h3 class="question-title">Is <?= guestName ?> over 21?</h3>
+          <select class="dropdown required" name="over21" id="email-updates">
+            <option value="" selected disabled>Please make a selection</option>
+            <option value="yes" data-next="7">Yes</option>
+            <option value="no" data-next="8">No</option>
+          </select>
+        </div>
+        <button id="section6-back" data-last="" onclick="prevSection(this, 6)">Back</button>
+        <button onclick="nextSection(6)">Next</button>
+      </div>
+      <!-- Section 7 alcoholPref -->
+      <div id="section7" class="form-section hidden">
+        <div class="form-entry-container">
+          <h3 class="question-title"><?= guestName ?>'s Alcoholic Drink Preferences</h3>
+          <p>To ensure that we have enough of everyone's preferred beverages</p>
+          <p class="error-text">Please complete the section before continuing!</p>
+        </div>
+        <div class="form-entry-container">
+          <h3 class="question-title"><?= guestName ?>'s Wine Preferences</h3>
+          <p>Select one or more of the following options</p>
+          <div class="option">
+            <input class="required" type="checkbox" name="winePreference" id="red-wine" value="red" onchange="toggleCheckboxes(this)">
+            <label for="red-wine">Red Wine</label>
+          </div>
+          <div class="option">
+            <input class="required" type="checkbox" name="winePreference" id="white-wine" value="white" onchange="toggleCheckboxes(this)">
+            <label for="white-wine">White Wine</label>
+          </div>
+          <div class="option">
+            <input class="required" type="checkbox" name="winePreference" id="rose-wine" value="rosé" onchange="toggleCheckboxes(this)">
+            <label for="rose-wine">Rosé Wine</label>
+          </div>
+          <div class="option">
+            <input class="required" type="checkbox"  name="winePreference" id="no-wine" value="" onchange="toggleCheckboxes(this)">
+            <label for="no-wine">None</label>
+          </div>
+        </div>
+        <div class="form-entry-container">
+          <h3 class="question-title"><?= guestName ?>'s Liquor Preferences</h3>
+          <p>Select one or more of the following options</p>
+          <div class="option">
+            <input class="required" type="checkbox" name="liquorPreference" id="vodka-liquor" value="vodka" onchange="toggleCheckboxes(this)">
+            <label for="vodka-liquor">Vodka</label>
+          </div>
+          <div class="option">
+            <input class="required" type="checkbox" name="liquorPreference" id="tequila-liquor" value="tequila" onchange="toggleCheckboxes(this)">
+            <label for="tequila-liquor">Tequila</label>
+          </div>
+          <div class="option">
+            <input class="required" type="checkbox"  name="liquorPreference" id="no-liquor" value="" onchange="toggleCheckboxes(this)">
+            <label for="no-liquor">None</label>
+          </div>
+        </div>
+        <div class="form-entry-container">
+          <h3 class="question-title"><?= guestName ?>'s Beer Preferences</h3>
+          <p>Enter a preferred brand/type or enter "none"</p>
+          <input class="required" type="text" name="beerPreference" id="beer-preference" inputmode="latin" placeholder="preferred beer or 'none'">
+        </div>
+        <button id="section7-back" data-last="" onclick="prevSection(this, 7)">Back</button>
+        <button onclick="nextSection(7)">Next</button>
+      </div>
+    </form>
+    <!-- Section 8 submitForm -->
+    <div id="section8" class="form-section hidden">
+      <div class="form-entry-container">
+        <h3 class="question-title">Thank you for completing RSVP for <?= guestName ?>! Press submit to continue.</h3>
+      </div>
+      <button id="section8-back" data-last="" onclick="prevSection(this, 8)">Back</button>
+      <button  id="submit-form" onclick="submitForm()">Submit</button>
+      <a id="finish" class="hidden" href="#"><button>Finish</button></a>
+    </div>
+    <div style="padding-bottom: 20%;"></div>
+    <div id="overlay"></div>
+    <div class="loader" id="loader"></div>
+    <?!= include('Javascript'); ?>
+  </body>
+</html>
